@@ -1,8 +1,8 @@
 """Tests for the oboeru quiz app.
 
-The quiz only depends on the k2sqlite database *contract* (the kanji_seed and
+The quiz only depends on the kanjibon database *contract* (the kanji_seed and
 distractor_pool views), so tests run against a tiny hand-written fixture DB —
-no k2sqlite import needed.
+no kanjibon import needed.
 """
 
 import sqlite3

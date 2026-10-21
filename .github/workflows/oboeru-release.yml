@@ -28,7 +28,7 @@ jobs:
 
       - name: Build KANJIDIC2 database into the package
         # Bundled as package data so `pip install oboeru` works out of the box.
-        run: uv run k2sqlite build --input data/kanjidic2.xml --db packages/oboeru/src/oboeru/kanjidic2.sqlite
+        run: uv run kanjibon build --input data/kanjidic2.xml --db packages/oboeru/src/oboeru/kanjidic2.sqlite
 
       - name: Build oboeru package
         run: uv build --package oboeru

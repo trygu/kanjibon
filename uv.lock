@@ -8,7 +8,7 @@ resolution-markers = [
 
 [manifest]
 members = [
-    "k2sqlite",
+    "kanjibon",
     "oboeru",
 ]
 
@@ -239,7 +239,7 @@ wheels = [
 ]
 
 [[package]]
-name = "k2sqlite"
+name = "kanjibon"
 version = "0.1.0"
 source = { editable = "." }
 

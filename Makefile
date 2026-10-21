@@ -4,13 +4,13 @@ install:
 	uv sync
 
 build:
-	uv run k2sqlite build --input data/kanjidic2.xml --db output/kanjidic2.sqlite
+	uv run kanjibon build --input data/kanjidic2.xml --db output/kanjidic2.sqlite
 
 quiz:
 	uv run --package oboeru oboeru
 
 artifacts: build
-	uv run k2sqlite artifacts --db output/kanjidic2.sqlite --output-dir output
+	uv run kanjibon artifacts --db output/kanjidic2.sqlite --output-dir output
 
 test:
 	uv run pytest

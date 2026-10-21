@@ -2,16 +2,16 @@
 
 ## Project Overview
 
-**k2sqlite** converts the KANJIDIC2 XML file (`data/kanjidic2.xml`, kept in-repo — no
+**kanjibon** converts the KANJIDIC2 XML file (`data/kanjidic2.xml`, kept in-repo — no
 downloads, no LFS) into a normalized SQLite database. It is the data foundation for a
 kanji learning app: the shipped artifact is `output/kanjidic2.sqlite`, and apps consume
 it through the **app contract views** (`kanji_seed`, `distractor_pool`, `kanji_priority`)
 — not by reading the XML or scraping tables.
 
-- `src/k2sqlite/builder.py` — streaming XML parser → SQLite (schema, inserts, finalize)
-- `src/k2sqlite/cli.py` — `k2sqlite build|export|artifacts` commands
+- `src/kanjibon/builder.py` — streaming XML parser → SQLite (schema, inserts, finalize)
+- `src/kanjibon/cli.py` — `kanjibon build|export|artifacts` commands
 - `packages/oboeru/` — the **oboeru** kanji quiz, an independent PyPI package
-  (uv workspace member; depends only on the DB contract views, not on k2sqlite)
+  (uv workspace member; depends only on the DB contract views, not on kanjibon)
 - `tests/` — pytest, runs against `tests/fixtures/sample_kanjidic2.xml`
 - `.github/workflows/build-database.yml` — CI: test → build → artifacts → release assets
 
@@ -93,8 +93,8 @@ after mistakes.
 - `uv.lock` is committed — update it via `uv lock` when dependencies change.
 - Tests: `uv run pytest` (or `make test`). Lint/format: `uv run ruff check src/ tests/ packages/`,
   `uv run black src/ tests/ packages/`.
-- **Workspace**: this is a uv workspace — `k2sqlite` at the root, `oboeru` in
-  `packages/oboeru`. `uv sync` installs both. Runtime deps of **k2sqlite** stay
+- **Workspace**: this is a uv workspace — `kanjibon` at the root, `oboeru` in
+  `packages/oboeru`. `uv sync` installs both. Runtime deps of **kanjibon** stay
   empty; oboeru's deps (textual, pillow) belong to its own pyproject. Run the quiz
   via `make quiz` (`uv run --package oboeru oboeru`).
 

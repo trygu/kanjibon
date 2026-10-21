@@ -28,7 +28,7 @@ uvx oboeru
 ```
 
 The KANJIDIC2 database (built by
-[k2sqlite](https://github.com/trygu/k2sqlite)) is bundled with the package,
+[kanjibon](https://github.com/trygu/kanjibon)) is bundled with the package,
 so no setup is needed. Pass `--db /path/to/kanjidic2.sqlite` if you have your
 own copy.
 

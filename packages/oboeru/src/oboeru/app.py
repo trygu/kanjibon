@@ -1,4 +1,4 @@
-"""oboeru (覚える) — terminal kanji quiz on a k2sqlite database.
+"""oboeru (覚える) — terminal kanji quiz on a kanjibon database.
 
 Uses the database "app contract": questions come from the kanji_seed view
 (one row per kanji, by JLPT level) and distractors from distractor_pool.
@@ -130,7 +130,7 @@ class Question:
 
 
 class KanjiDB:
-    """Read-only access to the k2sqlite database via its app contract views."""
+    """Read-only access to the kanjibon database via its app contract views."""
 
     def __init__(self, path: Path):
         self.conn = sqlite3.connect(path)
@@ -667,7 +667,7 @@ def main() -> None:
     if not db.exists():
         parser.error(
             f"{db} not found — pass --db (get kanjidic2.sqlite from "
-            "github.com/trygu/k2sqlite/releases)"
+            "github.com/trygu/kanjibon/releases)"
         )
     if args.progress:
         progress = args.progress

@@ -1,7 +1,7 @@
 import sqlite3
 from pathlib import Path
 
-from k2sqlite.builder import _calculate_modern_jlpt, build_sqlite
+from kanjibon.builder import _calculate_modern_jlpt, build_sqlite
 
 FIXTURE = Path(__file__).parent / "fixtures" / "sample_kanjidic2.xml"
 

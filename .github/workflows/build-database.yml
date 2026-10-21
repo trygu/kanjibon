@@ -32,12 +32,12 @@ jobs:
       - name: Build SQLite database
         run: |
           mkdir -p out
-          uv run k2sqlite build --input data/kanjidic2.xml --db out/kanjidic2.sqlite
+          uv run kanjibon build --input data/kanjidic2.xml --db out/kanjidic2.sqlite
 
       - name: Generate production artifacts
         run: |
           # Generate comprehensive artifact package
-          uv run k2sqlite artifacts --db out/kanjidic2.sqlite --output-dir out/artifacts --version "${{ github.ref_name || github.sha }}"
+          uv run kanjibon artifacts --db out/kanjidic2.sqlite --output-dir out/artifacts --version "${{ github.ref_name || github.sha }}"
 
       - name: Verify database and artifacts
         run: |

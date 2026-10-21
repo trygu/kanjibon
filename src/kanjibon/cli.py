@@ -145,7 +145,7 @@ def generate_artifacts(db_path: Path, output_dir: Path, version: str | None = No
 
 
 def app():
-    ap = argparse.ArgumentParser(prog="k2sqlite")
+    ap = argparse.ArgumentParser(prog="kanjibon")
     sub = ap.add_subparsers(dest="cmd", required=True)
 
     ap_build = sub.add_parser("build", help="Build SQLite from KANJIDIC2.xml")

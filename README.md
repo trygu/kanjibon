@@ -2,7 +2,7 @@
 
 A fast, memory-efficient tool for converting KANJIDIC2 XML data into a normalized SQLite database. Built with streaming XML parsing and batch processing for optimal performance.
 
-![Build Database](https://github.com/trygu/k2sqlite/workflows/Build%20KANJIDIC2%20SQLite%20Database/badge.svg)
+![Build Database](https://github.com/trygu/kanjibon/workflows/Build%20KANJIDIC2%20SQLite%20Database/badge.svg)
 
 ## Features
 
@@ -29,7 +29,7 @@ This project uses [uv](https://docs.astral.sh/uv/) for dependency management.
 uv sync
 
 # 3. Convert KANJIDIC2.xml to SQLite (using included data file)
-uv run k2sqlite build --input data/kanjidic2.xml --db output/kanjidic2.sqlite
+uv run kanjibon build --input data/kanjidic2.xml --db output/kanjidic2.sqlite
 
 # Or use the Makefile shortcuts (they call uv for you):
 make build       # build the database
@@ -42,12 +42,12 @@ make test        # run the test suite
 Instead of building the database yourself, you can download a pre-built SQLite database from our GitHub releases or CI artifacts:
 
 ### From GitHub Releases
-1. Go to the [Releases page](https://github.com/trygu/k2sqlite/releases)
+1. Go to the [Releases page](https://github.com/trygu/kanjibon/releases)
 2. Download `kanjidic2.sqlite` from the latest release
 3. **NEW**: Also available - `kanjidic2-artifacts.tar.gz` containing the complete production package
 
 ### From CI Artifacts (Latest Build)
-1. Go to [Actions](https://github.com/trygu/k2sqlite/actions)
+1. Go to [Actions](https://github.com/trygu/kanjibon/actions)
 2. Click on the latest successful build
 3. Download artifacts:
    - `kanjidic2-sqlite-*` - Just the SQLite database
@@ -258,10 +258,10 @@ Resulting distribution in the `kanji_seed` view (kanji with English meanings):
 ### Build Database
 ```bash
 # Using included KANJIDIC2 data
-k2sqlite build --input data/kanjidic2.xml --db output/kanjidic2.sqlite --batch 500
+kanjibon build --input data/kanjidic2.xml --db output/kanjidic2.sqlite --batch 500
 
 # Using your own KANJIDIC2 file
-k2sqlite build --input /path/to/your/KANJIDIC2.xml --db output/kanjidic2.sqlite --batch 500
+kanjibon build --input /path/to/your/KANJIDIC2.xml --db output/kanjidic2.sqlite --batch 500
 ```
 
 Build Options:
@@ -276,13 +276,13 @@ Build Options:
 ### Export Data
 ```bash
 # Basic CSV export
-k2sqlite export --db output/kanjidic2.sqlite --view kanji_seed --format csv --limit 100 --output kanji.csv
+kanjibon export --db output/kanjidic2.sqlite --view kanji_seed --format csv --limit 100 --output kanji.csv
 
 # Basic JSON export
-k2sqlite export --db output/kanjidic2.sqlite --view kanji_priority --format json --limit 50 --output priority.json
+kanjibon export --db output/kanjidic2.sqlite --view kanji_priority --format json --limit 50 --output priority.json
 
 # Stream to stdout for further processing
-k2sqlite export --db output/kanjidic2.sqlite --view kanji_seed --format csv | head -20
+kanjibon export --db output/kanjidic2.sqlite --view kanji_seed --format csv | head -20
 ```
 
 **Philosophy**: The export function provides basic data access. Your applications should implement their own specialized logic for:
@@ -307,10 +307,10 @@ The artifacts command generates a quiz-focused package optimized for kanji learn
 make artifacts
 
 # Or generate artifacts manually to different location
-k2sqlite artifacts --db output/kanjidic2.sqlite --output-dir dist/
+kanjibon artifacts --db output/kanjidic2.sqlite --output-dir dist/
 
 # Generate artifacts with custom version
-k2sqlite artifacts --db output/kanjidic2.sqlite --output-dir output --version "v1.0.0"
+kanjibon artifacts --db output/kanjidic2.sqlite --output-dir output --version "v1.0.0"
 ```
 
 **Generated Files**:
@@ -385,7 +385,7 @@ uv sync
 uv run pytest
 
 # Run tests with coverage
-uv run pytest --cov=k2sqlite
+uv run pytest --cov=kanjibon
 ```
 
 The test suite uses a sample KANJIDIC2.xml file in `tests/fixtures/` to verify the conversion process works correctly.
