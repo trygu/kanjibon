@@ -34,6 +34,24 @@ QUESTIONS_PER_ROUND = 10
 MAX_BOX = 4  # Leitner box cap; box >= 3 counts as "mastered"
 LEVEL_NAMES = {5: "N5", 4: "N4", 3: "N3", 2: "N2", 1: "N1"}
 
+# Short praise words for a correct answer (rotated at random)
+PRAISE = ("すごい！", "よくやった！", "見事！", "完璧！")
+
+
+def round_rank(correct: int, total: int) -> str:
+    """One-line Japanese rank for the round summary, by accuracy."""
+    acc = correct / total if total else 0
+    if acc == 1:
+        return "満点！  perfect round 🎉"
+    if acc >= 0.8:
+        return "優秀  excellent"
+    if acc >= 0.6:
+        return "良し  good"
+    if acc >= 0.4:
+        return "まだまだ  keep going"
+    return "がんばろう  let's try again"
+
+
 # Bundled font first (checked below): identical kanji art on every machine,
 # including bare `uvx oboeru` venvs. System fonts are the fallback for dev
 # checkouts where the bundled font isn't present yet.
@@ -408,7 +426,8 @@ class QuizScreen(Screen):
         self.update_stats()
 
     def update_stats(self) -> None:
-        flame = f"   🔥 streak {self.streak}" if self.streak >= 2 else ""
+        fire = "🔥🔥" if self.streak >= 5 else "🔥"
+        flame = f"   {fire} streak {self.streak}" if self.streak >= 2 else ""
         ref = f"{self.questions[self.index].literal}   " if self.art_active else ""
         self.query_one("#stats", Static).update(
             f"{ref}{LEVEL_NAMES[self.lvl]}"
@@ -439,7 +458,7 @@ class QuizScreen(Screen):
             gained = 10 + 5 * (self.streak - 1)
             self.score += gained
             self.correct_count += 1
-            feedback.update(f"✓ Correct!  +{gained}")
+            feedback.update(f"✓ {random.choice(PRAISE)}  +{gained}")
             feedback.remove_class("bad")
             feedback.add_class("ok")
             if self.streak >= 2:
@@ -525,6 +544,7 @@ class SummaryScreen(Screen):
     def compose(self) -> ComposeResult:
         rows = [
             Static("R O U N D   C O M P L E T E", id="sum-title"),
+            Static(round_rank(self.correct, self.total), id="sum-rank"),
             Static("", id="sum-stats"),
         ]
         if self.missed:
@@ -617,6 +637,7 @@ class KanjiQuizApp(App):
     .hidden { display: none; }
 
     #sum-title { text-align: center; color: #7aa2f7; text-style: bold; }
+    #sum-rank { text-align: center; color: #bb9af7; text-style: bold; margin-bottom: 1; }
     #sum-stats { text-align: center; color: #e0af68; margin: 1 0; }
     #sum-missed {
         text-align: center;

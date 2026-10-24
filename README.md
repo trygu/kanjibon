@@ -418,8 +418,10 @@ make quiz    # or: uv run --package oboeru oboeru
   (Leitner boxes), mastered kanji fade away
 - **Sessions are saved**: per-kanji correct/wrong + session history persist in
   `output/quiz_progress.sqlite`; the menu shows lifetime accuracy and mastered count
-- **Juice**: score with streak bonuses 🔥, animated entrances, streak bounce and
-  wrong-answer shake, round summary with your personal review list
+- **Juice**: score with streak bonuses 🔥 (double flame at 5+), rotated
+  Japanese praise on correct answers, animated entrances, streak bounce and
+  wrong-answer shake, round summary with a Japanese rank (満点！ at 10/10)
+  and your personal review list
 
 Keys: `1-4` or `↑/↓` + `enter` answer, `enter` next question, `q` back/quit.
 
