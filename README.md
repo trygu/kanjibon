@@ -2,7 +2,7 @@
 
 A fast, memory-efficient tool for converting KANJIDIC2 XML data into a normalized SQLite database. Built with streaming XML parsing and batch processing for optimal performance.
 
-![Build Database](https://github.com/trygu/kanjibon/workflows/Build%20KANJIDIC2%20SQLite%20Database/badge.svg)
+![Build Database](https://github.com/trygu/kanjibon/actions/workflows/build-database.yml/badge.svg)
 
 ## Features
 
