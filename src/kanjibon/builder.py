@@ -310,7 +310,7 @@ def _process_query_code(elem, rec):
     rec["query_codes"].append((qtype, value))
 
 
-def _calculate_modern_jlpt(grade, freq, old_jlpt):
+def _calculate_modern_jlpt(grade, freq, old_jlpt, literal=None):
     """
     Estimate a modern JLPT level (1=N1 ... 5=N5) for each kanji.
 
@@ -337,6 +337,12 @@ def _calculate_modern_jlpt(grade, freq, old_jlpt):
     if freq is not None and freq <= 1000 and grade in (5, 6):
         return 3
 
+    # Trygve's reviewed literal estimates, 2026-10-26. The proposed broad
+    # N3-to-N1 fallback migration was explicitly withdrawn; retain N3 here.
+    # These exceptions reflect reviewed vocabulary, not a global-rank cutoff.
+    if grade == 8 and freq is None:
+        return {"拶": 3, "痩": 3, "戚": 3, "溺": 2, "僅": 2, "籠": 2}.get(literal, 3)
+
     # Remaining jouyou kanji (grades 1-6 = kyouiku, 8 = secondary jouyou)
     if grade in (1, 2, 3, 4, 5, 6, 8):
         return 2 if freq is not None else 3
@@ -350,7 +356,7 @@ def _insert_character_data(cur, rec):
     literal = rec["literal"]
 
     # Calculate modern JLPT level from old JLPT data
-    jlpt = _calculate_modern_jlpt(rec["grade"], rec["freq"], rec["jlpt"])
+    jlpt = _calculate_modern_jlpt(rec["grade"], rec["freq"], rec["jlpt"], literal)
 
     # Insert main kanji record
     cur.execute(

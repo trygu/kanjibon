@@ -239,6 +239,10 @@ The `jlpt` column is computed at build time in two steps:
    - Grade 3-4 + frequency ≤ 500 → **N4**
    - Grade 5-6 + frequency ≤ 1000 → **N3**
    - Other jouyou kanji (grades 1-6, 8) → **N2** with frequency data, **N3** without
+   - Reviewed literal exceptions (Trygve, 26 October 2026): untagged Grade8,
+     no-frequency 僅・籠・溺 → **N2**; 拶・痩・戚 stay **N3**. Legacy evidence
+     still takes priority. The proposed broad 68-character N3→N1 migration was
+     withdrawn: those characters retain N3 and no rank threshold is used.
    - Non-jouyou kanji (hyougai/jinmeiyou) → **N1** (genuinely advanced/rare)
 
 Resulting distribution in the `kanji_seed` view (kanji with English meanings):
@@ -247,8 +251,8 @@ Resulting distribution in the `kanji_seed` view (kanji with English meanings):
 |-------|------:|--------------------:|
 | N5 (easiest) | 103 | 103 |
 | N4 | 182 | 182 |
-| N3 | 813 | 739 |
-| N2 | 1,289 | 1,181 |
+| N3 | 810 | 739 |
+| N2 | 1,292 | 1,181 |
 | N1 (hardest) | 7,996 | 296 |
 
 **App Contract**: The `lvl` column in views uses reversed numbering (5=N5, 4=N4, 3=N3, 2=N2, 1=N1) to match common app expectations where higher numbers = easier levels.

@@ -18,7 +18,11 @@ def test_modern_jlpt_mapping():
     assert _calculate_modern_jlpt(4, 300, None) == 4
     assert _calculate_modern_jlpt(6, 700, None) == 3
     assert _calculate_modern_jlpt(8, 445, None) == 2  # jouyou with freq
-    assert _calculate_modern_jlpt(8, None, None) == 3  # jouyou without freq
+    assert _calculate_modern_jlpt(8, None, None) == 3  # broad N3-to-N1 migration withdrawn
+    for literal, level in {"拶": 3, "痩": 3, "戚": 3, "溺": 2, "僅": 2, "籠": 2}.items():
+        assert _calculate_modern_jlpt(8, None, None, literal) == level
+        assert _calculate_modern_jlpt(8, None, 4, literal) == 5  # legacy evidence wins
+    assert _calculate_modern_jlpt(6, None, None) == 3  # primary-school fallback unchanged
     assert _calculate_modern_jlpt(None, None, None) == 1  # non-jouyou
     assert _calculate_modern_jlpt(9, 2000, None) == 1  # jinmeiyou is not jouyou
 
@@ -35,7 +39,7 @@ def test_build_sqlite(tmp_path: Path):
     assert rows["水"] == ("水", 1, 4, 60, 5)  # Legacy JLPT 4 -> N5
     assert rows["逢"][2] == 10  # First stroke count wins, miscounts ignored
     assert rows["韓"][4] == 2  # Jouyou with freq, no legacy JLPT -> N2
-    assert rows["柿"][4] == 3  # Jouyou without freq, no legacy JLPT -> N3
+    assert rows["柿"][4] == 3  # existing fallback retained
     assert rows["逢"][4] == 1  # Non-jouyou -> N1
 
     # Test quiz app contract views exist
