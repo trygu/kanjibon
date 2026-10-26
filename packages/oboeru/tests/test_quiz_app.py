@@ -200,6 +200,19 @@ def test_kanji_art(quiz_env):
     assert any(c in art.plain for c in "█▀▄")
 
 
+def test_splash_card_shape():
+    from rich.cells import cell_len
+
+    # The moon is geometric (PIL, no CJK font), so the card is deterministic:
+    # 17 rows, 32 cells wide, December card ribbon at the bottom.
+    card = quiz.splash_card()
+    lines = card.plain.splitlines()
+    assert len(lines) == 17
+    assert len({cell_len(line) for line in lines}) == 1  # every row fills the card
+    assert lines[0][0] == "╭" and lines[-1][0] == "╰"
+    assert "十二月" in card.plain and "花  札" in card.plain
+
+
 def test_kanji_art_fallback_without_font(quiz_env, monkeypatch):
     monkeypatch.setattr(quiz, "CJK_FONT_PATHS", [])
     monkeypatch.setattr(quiz, "BUNDLED_FONT", Path("/nonexistent.otf"))

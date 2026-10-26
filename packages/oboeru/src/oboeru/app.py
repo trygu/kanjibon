@@ -23,6 +23,7 @@ from pathlib import Path
 from typing import ClassVar
 
 from PIL import Image, ImageDraw, ImageFont
+from rich.cells import cell_len
 from rich.text import Text
 from textual.app import App, ComposeResult
 from textual.binding import Binding
@@ -110,6 +111,65 @@ def kanji_art(literal: str, pixels: int = 24, color: str = "#e0af68"):
         if y + 2 < pixels:
             art.append("\n")
     return art
+
+
+def splash_card() -> Text:
+    """The start screen's ASCII hanafuda: the December card (十二月), the
+    face of the deck. Rendered the way terminal art is made — a bitmap
+    painted with PIL, then mapped to half-blocks (█ ▀ ▄) so the moon gets
+    anti-aliased edges. Full moon with a cloud silhouette, framed, with
+    the name ribbon below. Geometric, so no CJK font is required."""
+    frame, gold, blue = "#9a9ec5", "#e0af68", "#7aa2f7"
+
+    def moon_rows(cols: int, rows: int) -> list[str]:
+        scale = 8
+        img = Image.new("L", (cols * scale, rows * 2 * scale), 0)
+        d = ImageDraw.Draw(img)
+        cx, cy = cols * scale * 0.5, rows * 2 * scale * 0.46
+        r = min(cols, rows * 2) * scale * 0.40
+        d.ellipse([cx - r, cy - r, cx + r, cy + r], fill=255)
+        # Cloud silhouette overlapping the moon's lower-left
+        for ex, ey, er in ((0.30, 0.70, 0.20), (0.44, 0.75, 0.16), (0.20, 0.77, 0.12)):
+            ox, oy = (ex - 0.5) * 2 * r, (ey - 0.5) * 2 * r
+            d.ellipse(
+                [cx + ox - er * 2 * r, cy + oy - er * 2 * r,
+                 cx + ox + er * 2 * r, cy + oy + er * 2 * r],
+                fill=0,
+            )
+        img = img.resize((cols, rows * 2), Image.LANCZOS)
+        px = img.load()
+        return [
+            "".join(
+                "█" if px[x, y] > 127 and px[x, y + 1] > 127
+                else "▀" if px[x, y] > 127
+                else "▄" if px[x, y + 1] > 127
+                else " "
+                for x in range(cols)
+            )
+            for y in range(0, rows * 2, 2)
+        ]
+
+    moon = moon_rows(24, 11)
+    inner = 28
+
+    def centered(s: str, width: int = inner) -> str:
+        n = cell_len(s)
+        return " " * ((width - n) // 2) + s + " " * (width - (width - n) // 2 - n)
+
+    card = Text()
+    card.append(f"╭{'─' * (inner + 2)}╮\n", style=frame)
+    card.append(f"│╭{'─' * inner}╮│\n", style=frame)
+    card.append(f"││{' ' * inner}││\n", style=frame)
+    for line in moon:
+        card.append("││", style=frame)
+        card.append(centered(line), style=gold)
+        card.append("││\n", style=frame)
+    card.append(f"│╰{'─' * inner}╯│\n", style=frame)
+    card.append("│ ", style=frame)
+    card.append(centered("十二月 ・ 花  札", inner + 1), style=f"bold {blue}")
+    card.append("│\n", style=frame)
+    card.append(f"╰{'─' * (inner + 2)}╯", style=frame)
+    return card
 
 
 def nudge(widget, frames: list[tuple[int, int]], step: float = 0.06) -> None:
@@ -299,7 +359,7 @@ class StartScreen(Screen):
         answers, correct, mastered, sessions = self.app.progress.lifetime()
         acc = f"{100 * correct / answers:.0f}%" if answers else "—"
         yield Vertical(
-            Static("漢 字", id="logo"),
+            Static(splash_card(), id="logo"),
             Static("", id="title"),
             Static(
                 f"answered {answers} ・ accuracy {acc}"
